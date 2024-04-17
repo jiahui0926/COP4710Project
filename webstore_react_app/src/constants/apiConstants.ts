@@ -6,4 +6,5 @@ export const API_ROUTE_PATHS = {
   ToGetShopInfo: "shopInfo",
   SignUp: "signup",
   ToGetUserInfo: "user",
+  Login: "login",
 } as const;

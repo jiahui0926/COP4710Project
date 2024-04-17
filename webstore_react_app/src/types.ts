@@ -43,3 +43,8 @@ export interface IUserInfoView {
   password: string;
   isaseller: boolean;
 }
+
+export interface ILoginInfo {
+  email: string;
+  password: string;
+}

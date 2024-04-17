@@ -6,12 +6,16 @@ import {
   Grid,
   TextField,
   Button,
+  Snackbar,
+  Alert,
   Link,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ROUTE_PATHS } from "../constants/routes";
 import { useAuth } from "../contexts/AuthProvider";
+import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
+import { ILoginInfo, IUserInfoView } from "../types";
 
 export default function LoginPage() {
   const { signedIn, userName, userID, signIn } = useAuth();
@@ -25,19 +29,61 @@ export default function LoginPage() {
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   // Handler for form submission
   const handleFormSubmission = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
 
-    const loginInfo = {
+    const formData = new FormData(event.currentTarget);
+    const loginInfo: ILoginInfo = {
       email: formData.get("email") as string,
-      passowrd: formData.get("password") as string,
+      password: formData.get("password") as string,
     };
-    console.log(loginInfo);
+
+    // Try to run log in API call
+    try {
+      // Make API calls and store response
+      const response = await fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.Login}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginInfo),
+      });
+
+      // If the response is not a status in 200-299
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Wrong email or password");
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // If response is ok, extract json object from it
+      const userData: IUserInfoView = await response.json();
+      // Set AuthContext/SignIn
+      signIn(userData.firstname, userData.userid, userData.isaseller);
+      // Redirect to homepage
+      navigate(ROUTE_PATHS.Home);
+    } catch (error: any) {
+      // Set snackbar message
+      setSnackbarMessage(error.message);
+      // Show snackbar
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
   };
 
   return (
@@ -121,6 +167,19 @@ export default function LoginPage() {
           </Grid>
         </Box>
       </Paper>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
