@@ -1,3 +1,9 @@
+// Interface for login data sent by client
+export interface ILoginInfo {
+  email: string;
+  password: string;
+}
+
 // Interface for sign up data sent by client
 export interface ISignUpInfo {
   firstname: string;

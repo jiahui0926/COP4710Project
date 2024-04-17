@@ -158,6 +158,26 @@ const getUserInfoByID = async (userid: string) => {
   return results;
 };
 
+/**
+ * Get user data from database by email and password
+ * @param email Email of user to get data of
+ * @param password Password of user to get data of
+ * @returns An IUserInfo object of user data
+ */
+const getUserByEmailAndPassword = async (email: string, password: string) => {
+  // Set query string
+  const query = `SELECT * FROM UserInfoView WHERE email = ? AND password = ?;`;
+  // Get query results from using query string and sequelize
+  const results: IUserInfoView[] = await sequelize.query(query, {
+    replacements: [email, password],
+    type: QueryTypes.SELECT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
 // Define default export
 const queries = {
   getUserInfoByEmail,
@@ -167,6 +187,7 @@ const queries = {
   getShopInfo,
   checkIfUserExists,
   createUser,
+  getUserByEmailAndPassword,
 };
 // Export object
 export default queries;

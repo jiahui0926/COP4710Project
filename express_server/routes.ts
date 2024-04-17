@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import psqlQueries from "./queries";
-import { ISignUpInfo, IUserInfoView } from "./types";
+import { ILoginInfo, ISignUpInfo, IUserInfoView } from "./types";
 
 // Initialize router
 const router = express.Router();
@@ -58,6 +58,28 @@ router.post("/signup/", async (req: Request, res: Response) => {
     );
     // Return a status 201 (Created) and new user's info from database
     res.status(201).json(newUserInfo[0]);
+  }
+});
+
+/**
+ * Endpoint to login to the page
+ */
+router.post("/login/", async (req: Request, res: Response) => {
+  // Get login info from request body.
+  const loginInfo: ILoginInfo = req.body;
+  // Try to get user's info from database
+  const userInfo: IUserInfoView[] = await psqlQueries.getUserByEmailAndPassword(
+    loginInfo.email,
+    loginInfo.password
+  );
+
+  // If user exists
+  if (userInfo.length > 0) {
+    // Return a status 200  successful and new user's info from database
+    res.status(201).json(userInfo[0]);
+  } else {
+    // Return a 400 error code
+    res.status(400).json(false);
   }
 });
 
