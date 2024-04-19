@@ -46,4 +46,21 @@ export interface IShopInfoView {
   ownername: string;
   owneremail: string;
   ownerdob: Date;
+  productcount: number;
+}
+
+// Interface for data to create a new shop
+export interface ICreateShopInfo {
+  ownerid: string;
+  shopname: string;
+  description: string;
+}
+
+// Interface for data to create a new product
+export interface ICreateProductInfo {
+  shopid: string;
+  name: string;
+  price: number;
+  quantity: number;
+  description: string;
 }

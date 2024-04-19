@@ -1,6 +1,13 @@
 import express, { Request, Response } from "express";
 import psqlQueries from "./queries";
-import { ILoginInfo, ISignUpInfo, IUserInfoView } from "./types";
+import {
+  ICreateProductInfo,
+  ICreateShopInfo,
+  ILoginInfo,
+  IShopInfoView,
+  ISignUpInfo,
+  IUserInfoView,
+} from "./types";
 
 // Initialize router
 const router = express.Router();
@@ -80,6 +87,64 @@ router.post("/login/", async (req: Request, res: Response) => {
   } else {
     // Return a 400 error code
     res.status(400).json(false);
+  }
+});
+
+/**
+ * Endpoint to get shops owned by a user
+ */
+router.get("/shopsownedby/:id", async (req: Request, res: Response) => {
+  // Get user id from request body
+  const userid: string = req.params.id;
+  // Try to get shops from database
+  try {
+    const shopList: IShopInfoView[] = await psqlQueries.getShopsOwnedByUser(
+      userid
+    );
+    // Return a status 200 and shops owned by user
+    res.status(201).json(shopList);
+  } catch (error) {
+    // Return a status 400 and error message
+    res.status(400).json(error);
+    console.log(error);
+  }
+});
+
+/**
+ * Endpoint to create shop for a user
+ */
+router.post("/createshop/", async (req: Request, res: Response) => {
+  console.log("Create Shop");
+  // Get new shop data from request body
+  const newShopInfo: ICreateShopInfo = req.body;
+  // Try to create shop
+  try {
+    const createResponse = await psqlQueries.createShop(newShopInfo);
+    // Return a status 200 and response
+    res.status(201).json(createResponse);
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
+});
+
+/**
+ * Endpoint to create product in a shop
+ */
+router.post("/createproduct/", async (req: Request, res: Response) => {
+  console.log("Create Product");
+  // Get new product data from request body
+  const newProductInfo: ICreateProductInfo = req.body;
+  // Try to create product
+  try {
+    const createResponse = await psqlQueries.createProduct(newProductInfo);
+    // Return a status 200 and response
+    res.status(201).json(createResponse);
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
   }
 });
 

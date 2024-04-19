@@ -2,6 +2,8 @@
 import { sequelize } from "./database";
 import { QueryTypes } from "sequelize";
 import {
+  ICreateProductInfo,
+  ICreateShopInfo,
   IShopInfoView,
   ISignUpInfo,
   IUserExistsResult,
@@ -178,6 +180,75 @@ const getUserByEmailAndPassword = async (email: string, password: string) => {
   return results;
 };
 
+/**
+ * Get all shops owned by a user
+ * @param userid of user to get data of
+ * @returns An list of IShopInfo object owned by user
+ */
+const getShopsOwnedByUser = async (userid: string) => {
+  // Set query string
+  const query = `SELECT * FROM ShopInfoView WHERE ownerid = ?;`;
+  // Get query results from using query string and sequelize
+  const results: IShopInfoView[] = await sequelize.query(query, {
+    replacements: [userid],
+    type: QueryTypes.SELECT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
+/**
+ * Create shop owned by a user
+ * @param shopInfo ICreateShopInfo object containing shop info
+ * @returns An list of IShopInfo object owned by user
+ */
+const createShop = async (shopInfo: ICreateShopInfo) => {
+  // Set query string
+  const query = `
+  INSERT INTO Shops (ShopName, EstablishDate, Description, Owner)
+  VALUES (?, CURRENT_DATE, ?, ?);
+  `;
+  // Get query results from using query string and sequelize
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [shopInfo.shopname, shopInfo.description, shopInfo.ownerid],
+    type: QueryTypes.INSERT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
+/**
+ * Create product for a shop
+ * @param productInfo ICreateProductInfo object containing shop info
+ * @returns An list of IShopInfo object owned by user
+ */
+const createProduct = async (productInfo: ICreateProductInfo) => {
+  // Set query string
+  const query = `
+  INSERT INTO Products (shopid, price, name, quantity, description)
+  VALUES (?, ?, ?, ?, ?);
+  `;
+  // Get query results from using query string and sequelize
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [
+      productInfo.shopid,
+      productInfo.price,
+      productInfo.name,
+      productInfo.quantity,
+      productInfo.description,
+    ],
+    type: QueryTypes.INSERT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
 // Define default export
 const queries = {
   getUserInfoByEmail,
@@ -188,6 +259,9 @@ const queries = {
   checkIfUserExists,
   createUser,
   getUserByEmailAndPassword,
+  getShopsOwnedByUser,
+  createShop,
+  createProduct,
 };
 // Export object
 export default queries;

@@ -35,9 +35,7 @@ export default function ShopsTable({ tableItems }: ShopsTableProps) {
                   {row.shopname}
                 </Link>
               </TableCell>
-              <TableCell align="right">
-                {row.establishdate.toDateString()}
-              </TableCell>
+              <TableCell align="right">{row.establishdate}</TableCell>
               <TableCell align="right">{row.productcount}</TableCell>
             </TableRow>
           ))}

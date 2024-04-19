@@ -9,8 +9,13 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthProvider";
+import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
+import { ICreateShopInfo } from "../types";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../constants/routes";
 
 export default function CreateStorePage() {
+  let navigate = useNavigate();
   const { userID } = useAuth();
 
   // States for form values
@@ -24,11 +29,35 @@ export default function CreateStorePage() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const shopInfo = {
-      owner: userID,
+    const shopInfo: ICreateShopInfo = {
+      ownerid: userID,
       shopname: formData.get("shopname") as string,
       description: formData.get("shopdescription") as string,
     };
+    // Try to run sign up API call
+    try {
+      // Make API calls and store response
+      const response = await fetch(
+        `${API_BASE_URL}/${API_ROUTE_PATHS.ToCreateShop}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(shopInfo),
+        }
+      );
+
+      // If the response is not a status in 200-299
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Error creating Shop");
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      // Go to Your Shops Page
+      navigate(ROUTE_PATHS.YourShops);
+    } catch (error: any) {
+      console.error("SignUp Error:", error.message);
+    }
     console.log(shopInfo);
   };
 

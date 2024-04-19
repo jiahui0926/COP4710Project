@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import { ShopInfo } from "../types";
 import ShopsTable from "../components/ShopsTable";
 import { Button } from "@mui/material";
+import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
 
 export default function CreateShopPage() {
   const { userID } = useAuth();
@@ -14,35 +15,24 @@ export default function CreateShopPage() {
   const [shopRows, setShopRows] = useState<ShopInfo[]>([]);
 
   useEffect(() => {
-    setShopRows([
-      {
-        shopid: "fc9402d0-1247-49dc-8fe5-9a7a15baad41",
-        shopname: "shop1",
-        description: "Lorem ipsum dolore est",
-        establishdate: new Date(),
-        ownername: "David Hasslehof",
-        owneremail: "owner@gmail.com",
-        productcount: 1000,
-      },
-      {
-        shopid: "fc9402d0-1247-49dc-8fe5-9a7a15baad41",
-        shopname: "shop2",
-        description: "Lorem ipsum dolore est",
-        establishdate: new Date(),
-        ownername: "David Hasslehof",
-        owneremail: "owner@gmail.com",
-        productcount: 1000,
-      },
-      {
-        shopid: "fc9402d0-1247-49dc-8fe5-9a7a15baad41",
-        shopname: "shop3",
-        description: "Lorem ipsum dolore est",
-        establishdate: new Date(),
-        ownername: "David Hasslehof",
-        owneremail: "owner@gmail.com",
-        productcount: 1000,
-      },
-    ]);
+    // Make API calls and store response
+    fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetShopsOfUser}/${userID}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        // If the response is not a status in 200-299
+        if (!response.ok) {
+          if (response.status === 400) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then((response) => {
+        setShopRows(response);
+        console.log(shopRows);
+      });
   }, []);
 
   return (

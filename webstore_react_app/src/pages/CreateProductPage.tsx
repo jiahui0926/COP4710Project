@@ -9,18 +9,21 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
+import { ICreateProductInfo } from "../types";
+import { ROUTE_PATHS } from "../constants/routes";
 
 export default function CreateStorePage() {
+  let navigate = useNavigate();
   let { shopID } = useParams();
   // States for form values
   const [shopName, setShopName] = useState("");
 
   // Run API calls on initial render
   useEffect(() => {
-    fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetTheNameOfAShop}/${shopID}`)
+    fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetShopInfo}/${shopID}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error retrieving data.");
@@ -39,13 +42,38 @@ export default function CreateStorePage() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const productInfo = {
+    const productInfo: ICreateProductInfo = {
       shopid: shopID || "", // Assuming shopID is obtained from useParams()
       name: formData.get("productname") as string,
       description: formData.get("productdescription") as string,
       price: parseFloat(formData.get("price") as string) || 0,
       quantity: parseInt(formData.get("productquantity") as string, 10) || 0,
     };
+
+    // Try to run sign up API call
+    try {
+      // Make API calls and store response
+      const response = await fetch(
+        `${API_BASE_URL}/${API_ROUTE_PATHS.ToCreateProduct}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(productInfo),
+        }
+      );
+
+      // If the response is not a status in 200-299
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Error creating Shop");
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      // Go to the Shop's Page
+      navigate(`${ROUTE_PATHS.Shop}/${productInfo.shopid}`);
+    } catch (error: any) {
+      console.error("SignUp Error:", error.message);
+    }
     console.log(productInfo);
   };
 

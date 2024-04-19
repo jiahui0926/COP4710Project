@@ -11,9 +11,11 @@ export interface ShopInfo {
   shopid: string;
   shopname: string;
   description: string;
-  establishdate: Date;
+  establishdate: string;
+  ownerid: string;
   ownername: string;
   owneremail: string;
+  ownerdob: string;
   productcount: number;
 }
 
@@ -47,4 +49,20 @@ export interface IUserInfoView {
 export interface ILoginInfo {
   email: string;
   password: string;
+}
+
+// Interface for data to create a new shop
+export interface ICreateShopInfo {
+  ownerid: string;
+  shopname: string;
+  description: string;
+}
+
+// Interface for data to create a new product
+export interface ICreateProductInfo {
+  shopid: string;
+  name: string;
+  price: number;
+  quantity: number;
+  description: string;
 }
