@@ -9,6 +9,7 @@ import {
   IUserExistsResult,
   IUserInfoView,
   IProductInfo,
+  IOrderInfoView,
 } from "./types";
 
 /**
@@ -267,6 +268,24 @@ const createProduct = async (productInfo: ICreateProductInfo) => {
   return results;
 };
 
+/**
+ * Get all orders made by a user
+ * @param userID ID of user
+ */
+const getUsersOrders = async (userid: string) => {
+  // Set query string
+  const query = `SELECT * FROM OrdersInfoView WHERE buyer = ?`;
+  // Get query results from using query string and sequelize
+  const results: IOrderInfoView[] = await sequelize.query(query, {
+    replacements: [userid],
+    type: QueryTypes.SELECT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
 // Define default export
 const queries = {
   getUserInfoByEmail,
@@ -281,6 +300,7 @@ const queries = {
   createShop,
   createProduct,
   makeSeller,
+  getUsersOrders,
 };
 // Export object
 export default queries;

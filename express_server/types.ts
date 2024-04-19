@@ -75,3 +75,15 @@ export interface IProductInfo {
   quantity: number;
   description: string;
 }
+
+// Interface for order data
+export interface IOrderInfoView {
+  orderid: string;
+  shopid: string;
+  shopname: string;
+  productid: string;
+  productname: string;
+  quantity: number;
+  orderdate: string;
+  buyerid: string;
+}

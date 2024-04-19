@@ -4,6 +4,7 @@ import {
   ICreateProductInfo,
   ICreateShopInfo,
   ILoginInfo,
+  IOrderInfoView,
   IProductInfo,
   IShopInfoView,
   ISignUpInfo,
@@ -176,6 +177,31 @@ router.post("/makeSeller/", async (req: Request, res: Response) => {
     console.log(error);
   }
 });
+
+/**
+ * Endpoint to get all orders made by a user
+ */
+router.get(
+  "/get_orders_made_by_user/:userid",
+  async (req: Request, res: Response) => {
+    // Get user id from params
+    const userid: string = req.params.userid;
+    console.log(userid);
+
+    try {
+      // Try to get order info
+      const ordersInfo: IOrderInfoView[] = await psqlQueries.getUsersOrders(
+        userid
+      );
+      // Return a status 200 and user's info
+      res.status(201).json(ordersInfo);
+    } catch (error) {
+      // Return a status 400 and error
+      res.status(400).json(error);
+      console.log(error);
+    }
+  }
+);
 
 // Export router to be used in index.ts file.
 export { router };

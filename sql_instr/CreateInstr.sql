@@ -93,3 +93,10 @@ SELECT
 userid, firstname, lastname, email, dob, password, 
 EXISTS(SELECT * FROM Sellers WHERE Users.userid = Sellers.sellerid) AS isaseller
 FROM Users;
+
+-- Create OrderInfoView
+CREATE VIEW OrdersInfoView AS
+SELECT O.orderid, O.shop as shopid, S.shopName, P.productID, P.name as productname, O.quantity, O.orderDate, O.buyer
+FROM Orders O
+JOIN Shops S ON O.shop = S.shopID
+JOIN Products P ON P.productID = O.product AND P.shopID = S.shopID;

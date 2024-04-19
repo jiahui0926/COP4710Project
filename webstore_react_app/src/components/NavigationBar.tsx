@@ -73,30 +73,35 @@ export default function NavigationBar() {
           </IconButton>
 
           {signedIn && (
-            <>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  navigate(ROUTE_PATHS.AllShops);
-                }}
-              >
-                All Stores
-              </Button>
-            </>
+            <Button
+              color="inherit"
+              onClick={() => {
+                navigate(ROUTE_PATHS.AllShops);
+              }}
+            >
+              All Stores
+            </Button>
           )}
 
           {signedIn && isASeller && (
-            <>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  navigate(ROUTE_PATHS.YourShops);
-                }}
-              >
-                Your Stores
-              </Button>
-            </>
+            <Button
+              color="inherit"
+              onClick={() => {
+                navigate(ROUTE_PATHS.YourShops);
+              }}
+            >
+              Your Stores
+            </Button>
           )}
+
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate(ROUTE_PATHS.Orders);
+            }}
+          >
+            Orders
+          </Button>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
 

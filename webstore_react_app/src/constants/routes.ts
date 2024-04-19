@@ -7,4 +7,5 @@ export const ROUTE_PATHS = {
   CreateShop: "/create_shop",
   CreateProduct: "/create_product",
   YourShops: "/your_shops",
+  Orders: "/your_orders",
 } as const;
