@@ -151,5 +151,31 @@ router.post("/createproduct/", async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Endpoint to make user a seller
+ */
+router.post("/makeSeller/", async (req: Request, res: Response) => {
+  console.log("Add to seller");
+  // Get user id from params
+  const userid: string = req.body.userid;
+  console.log(userid);
+
+  try {
+    // Try to add user to seller table
+    const createResponse = await psqlQueries.makeSeller(userid);
+
+    // Try to get user's new info
+    const newUserInfo: IUserInfoView[] = await psqlQueries.getUserInfoByID(
+      userid
+    );
+    // Return a status 200 and user's info
+    res.status(201).json(newUserInfo[0]);
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
+});
+
 // Export router to be used in index.ts file.
 export { router };

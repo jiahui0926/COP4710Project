@@ -19,7 +19,7 @@ export interface ShopInfo {
   productcount: number;
 }
 
-export interface IProductInfo {
+export interface ProductInfo {
   productid: string;
   name: string;
   price: number;

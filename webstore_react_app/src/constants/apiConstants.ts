@@ -10,4 +10,5 @@ export const API_ROUTE_PATHS = {
   ToGetShopsOfUser: "shopsownedby",
   ToCreateShop: "createshop",
   ToCreateProduct: "createproduct",
+  ToMakeUserASeller: "makeseller",
 } as const;

@@ -222,7 +222,27 @@ const createShop = async (shopInfo: ICreateShopInfo) => {
 /**
  * Create product for a shop
  * @param productInfo ICreateProductInfo object containing shop info
- * @returns An list of IShopInfo object owned by user
+ */
+const makeSeller = async (userID: string) => {
+  // Set query string
+  const query = `
+  INSERT INTO Sellers (sellerid)
+  VALUES (?);
+  `;
+  // Get query results from using query string and sequelize
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [userID],
+    type: QueryTypes.INSERT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
+/**
+ * Add user to seller table
+ * @param userID ID of user
  */
 const createProduct = async (productInfo: ICreateProductInfo) => {
   // Set query string
@@ -260,6 +280,7 @@ const queries = {
   getShopsOwnedByUser,
   createShop,
   createProduct,
+  makeSeller,
 };
 // Export object
 export default queries;

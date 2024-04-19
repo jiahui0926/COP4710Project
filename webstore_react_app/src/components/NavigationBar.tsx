@@ -12,9 +12,11 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useAuth } from "../contexts/AuthProvider";
+import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
+import { IUserInfoView } from "../types";
 
 export default function NavigationBar() {
-  const { signedIn, userName, isASeller, signOut } = useAuth();
+  const { signedIn, userName, userID, isASeller, signOut, signIn } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   let navigate = useNavigate();
 
@@ -24,6 +26,34 @@ export default function NavigationBar() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const makeUserASeller = async () => {
+    const userIDObj = {
+      userid: userID,
+    };
+    console.log(userIDObj);
+    const response = await fetch(
+      `${API_BASE_URL}/${API_ROUTE_PATHS.ToMakeUserASeller}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userIDObj),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Error making user a seller.");
+    } else {
+      const updateUserInfo: IUserInfoView = await response.json();
+      signIn(
+        updateUserInfo.firstname,
+        updateUserInfo.userid,
+        updateUserInfo.isaseller
+      );
+      navigate(ROUTE_PATHS.YourShops);
+    }
   };
 
   return (
@@ -99,16 +129,29 @@ export default function NavigationBar() {
               onClose={handleMenuClose}
             >
               {signedIn ? (
-                <MenuItem
-                  key="signOut"
-                  onClick={() => {
-                    navigate(ROUTE_PATHS.Login);
-                    signOut();
-                    handleMenuClose();
-                  }}
-                >
-                  Sign Out
-                </MenuItem>
+                <>
+                  <MenuItem
+                    key="signOut"
+                    onClick={() => {
+                      navigate(ROUTE_PATHS.Login);
+                      signOut();
+                      handleMenuClose();
+                    }}
+                  >
+                    Sign Out
+                  </MenuItem>
+                  {signedIn && !isASeller && (
+                    <MenuItem
+                      key="becomeASeller"
+                      onClick={() => {
+                        makeUserASeller();
+                        handleMenuClose();
+                      }}
+                    >
+                      Become a seller
+                    </MenuItem>
+                  )}
+                </>
               ) : (
                 [
                   <MenuItem
