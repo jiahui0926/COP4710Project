@@ -5,13 +5,13 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Product } from "../types";
+import { ProductInfo } from "../types";
 
 interface ShopGridProps {
-  gridItems: Product[];
+  gridItems: ProductInfo[];
 }
 
-const populateProductsGrid = (gridItems: Product[]) =>
+const populateProductsGrid = (gridItems: ProductInfo[]) =>
   gridItems.map((product, index) => (
     <Grid item xs={6} md={4} key={index}>
       <Card sx={{ minWidth: 275 }}>

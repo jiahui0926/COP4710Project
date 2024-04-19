@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Product } from "../types";
+import { ProductInfo } from "../types";
 import ProductsGrid from "../components/ProductsGrid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
@@ -10,7 +10,7 @@ import { ROUTE_PATHS } from "../constants/routes";
 export default function ShopPage() {
   let { isASeller } = useAuth();
   let { id } = useParams();
-  const [shopProducts, setAllShopProducts] = useState<Product[]>([]);
+  const [shopProducts, setAllShopProducts] = useState<ProductInfo[]>([]);
   const [shopName, setShopName] = useState<String>("");
 
   // Run API calls on initial render
