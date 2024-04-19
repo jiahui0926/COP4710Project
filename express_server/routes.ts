@@ -4,6 +4,7 @@ import {
   ICreateProductInfo,
   ICreateShopInfo,
   ILoginInfo,
+  IProductInfo,
   IShopInfoView,
   ISignUpInfo,
   IUserInfoView,
@@ -24,7 +25,9 @@ router.get("/getAllShops", async (req: Request, res: Response) => {
  * Endpoint to get all products of a shop by shopid
  */
 router.get("/productsOfShop/:id", async (req: Request, res: Response) => {
-  const shopProducts = await psqlQueries.getAllProductsOfAShop(req.params.id);
+  const shopProducts: IProductInfo[] = await psqlQueries.getAllProductsOfAShop(
+    req.params.id
+  );
   res.status(200).json(shopProducts);
 });
 

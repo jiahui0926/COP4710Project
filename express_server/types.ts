@@ -64,3 +64,14 @@ export interface ICreateProductInfo {
   quantity: number;
   description: string;
 }
+
+// Interface for product data
+export interface IProductInfo {
+  shopid: number;
+  productid: string;
+  name: string;
+  price: number;
+  shopname: string;
+  quantity: number;
+  description: string;
+}

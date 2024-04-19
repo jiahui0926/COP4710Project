@@ -29,6 +29,8 @@ const populateProductsGrid = (gridItems: ProductInfo[]) =>
             Description:
             <br />
             {product.description}
+            <br />
+            Quantity: {product.quantity}
           </Typography>
         </CardContent>
         <CardActions>

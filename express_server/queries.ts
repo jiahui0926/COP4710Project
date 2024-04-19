@@ -8,6 +8,7 @@ import {
   ISignUpInfo,
   IUserExistsResult,
   IUserInfoView,
+  IProductInfo,
 } from "./types";
 
 /**
@@ -35,15 +36,12 @@ const getAllShopsInfo = async () => {
 const getAllProductsOfAShop = async (ShopID: string) => {
   // Set query string
   const query = `
-  SELECT
-  Products.productid, Products.Name, Products.price, Products.description,
-  Shops.shopid, Shops.shopname
-  FROM Products
+  SELECT * FROM Products
   INNER JOIN Shops ON Products.ShopID = Shops.ShopID
   WHERE Shops.shopid = ?;
   `;
   // Get query results using query string and sequelize
-  const results = await sequelize.query(query, {
+  const results: IProductInfo[] = await sequelize.query(query, {
     replacements: [ShopID],
     type: QueryTypes.SELECT,
   });
