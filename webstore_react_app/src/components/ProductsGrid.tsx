@@ -10,7 +10,7 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { ICreateOrderInfo, ProductInfo } from "../types";
+import { ICreateOrderInfo, IEditProductData, ProductInfo } from "../types";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState, useEffect } from "react";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
@@ -19,10 +19,15 @@ import { ROUTE_PATHS } from "../constants/routes";
 
 interface ProductsGridProps {
   gridItems: ProductInfo[];
+  userOwnsShop: boolean;
   reloadFunction: () => void;
 }
 
-function ProductsGrid({ gridItems, reloadFunction }: ProductsGridProps) {
+function ProductsGrid({
+  gridItems,
+  userOwnsShop,
+  reloadFunction,
+}: ProductsGridProps) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [quantities, setQuantities] = useState<{ [productid: string]: number }>(
@@ -47,7 +52,7 @@ function ProductsGrid({ gridItems, reloadFunction }: ProductsGridProps) {
   const handleQuantityChange = (productid: string, value: number) => {
     setQuantities((prev) => ({
       ...prev,
-      [productid]: value < 1 ? 1 : value, // ensure the quantity never goes below 1
+      [productid]: value < 0 ? 0 : value, // ensure the quantity never goes below 0
     }));
   };
 
@@ -65,6 +70,9 @@ function ProductsGrid({ gridItems, reloadFunction }: ProductsGridProps) {
     };
 
     try {
+      if (buyInfo.quantity <= 0) {
+        throw new Error("Order quantity must be a positive number.");
+      }
       // Make API calls and store response
       const response = await fetch(
         `${API_BASE_URL}/${API_ROUTE_PATHS.ToBuyProduct}`,
@@ -93,6 +101,48 @@ function ProductsGrid({ gridItems, reloadFunction }: ProductsGridProps) {
     }
 
     console.log(buyInfo);
+  };
+
+  // Function to update product quantity
+  const updateProductQuantity = async (
+    shopid: string,
+    productid: string,
+    quantity: number
+  ) => {
+    const editProductData: IEditProductData = {
+      shopid: shopid,
+      productid: productid,
+      newQuantity: quantity,
+    };
+
+    try {
+      // Make API calls and store response
+      const response = await fetch(
+        `${API_BASE_URL}/${API_ROUTE_PATHS.ToSetProductQuantity}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(editProductData),
+        }
+      );
+      // If the response is not a status in 200-299
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Not enough in stock.");
+        } else if (response.status === 400) {
+          throw new Error("Server error");
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      reloadFunction();
+    } catch (error: any) {
+      // Set snackbar message
+      setSnackbarMessage(error.message);
+      // Show snackbar
+      setSnackbarOpen(true);
+    }
+
+    console.log(editProductData);
   };
 
   const handleCloseSnackbar = (
@@ -149,7 +199,11 @@ function ProductsGrid({ gridItems, reloadFunction }: ProductsGridProps) {
                   shrink: true,
                 }}
                 variant="outlined"
-                value={quantities[product.productid] || 1}
+                value={
+                  quantities[product.productid] !== undefined
+                    ? quantities[product.productid]
+                    : 1
+                }
                 onChange={(e) =>
                   handleQuantityChange(
                     product.productid,
@@ -161,6 +215,20 @@ function ProductsGrid({ gridItems, reloadFunction }: ProductsGridProps) {
               <Button size="small" onClick={handleBuyClick}>
                 Buy
               </Button>
+              {userOwnsShop && (
+                <Button
+                  size="small"
+                  onClick={() =>
+                    updateProductQuantity(
+                      product.shopid,
+                      product.productid,
+                      quantities[product.productid]
+                    )
+                  }
+                >
+                  Update Quantity
+                </Button>
+              )}
             </CardActions>
           </Card>
         </Grid>

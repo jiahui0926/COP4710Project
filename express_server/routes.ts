@@ -4,6 +4,7 @@ import {
   ICreateOrderInfo,
   ICreateProductInfo,
   ICreateShopInfo,
+  IEditProductData,
   ILoginInfo,
   IOrderInfoView,
   IProductInfo,
@@ -224,10 +225,10 @@ router.post("/create_order/", async (req: Request, res: Response) => {
       res.status(401).json(availableQuantity);
     } else {
       // Update product quantity
-      await psqlQueries.changeProductQuantityBy(
+      await psqlQueries.setProductQuantity(
         createOrderInfo.shopid,
         createOrderInfo.productid,
-        -1 * createOrderInfo.quantity
+        availableQuantity - createOrderInfo.quantity
       );
       // Create order
       const createResponse = await psqlQueries.createOrder(createOrderInfo);
@@ -241,5 +242,28 @@ router.post("/create_order/", async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Endpoint to set quantity of product
+ */
+router.post("/set_product_quantity/", async (req: Request, res: Response) => {
+  // Get data to create an order
+  const editProductData: IEditProductData = req.body;
+  console.log(editProductData);
+
+  try {
+    // Update product quantity
+    await psqlQueries.setProductQuantity(
+      editProductData.shopid,
+      editProductData.productid,
+      editProductData.newQuantity
+    );
+    // Return a status 200 and user's info
+    res.status(200).json();
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
+});
 // Export router to be used in index.ts file.
 export { router };

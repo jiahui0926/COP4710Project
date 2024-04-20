@@ -48,8 +48,6 @@ export default function ShopPage() {
         return response.json();
       })
       .then((response) => {
-        console.log("Response", response.length);
-        console.log(response);
         for (let i = 0; i < response.length; i++) {
           let shop: ShopInfo = response[i];
           if (shop.shopid === id) {
@@ -91,6 +89,7 @@ export default function ShopPage() {
       )}
       <ProductsGrid
         gridItems={shopProducts}
+        userOwnsShop={userOwnsShop}
         reloadFunction={reloadShopProducts}
       />
     </Container>

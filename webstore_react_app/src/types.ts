@@ -87,3 +87,10 @@ export interface ICreateOrderInfo {
   productid: string;
   quantity: number;
 }
+
+// Interface for data to create an order
+export interface IEditProductData {
+  shopid: string;
+  productid: string;
+  newQuantity: number;
+}

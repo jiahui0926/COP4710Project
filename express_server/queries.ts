@@ -319,20 +319,20 @@ const createOrder = async (createOrderInfo: ICreateOrderInfo) => {
  * @param productid ID of product
  * @param amount Amount to add to product quantity
  */
-const changeProductQuantityBy = async (
+const setProductQuantity = async (
   shopid: string,
   productid: string,
-  amount: number
+  newQuantity: number
 ) => {
   // Set query string
   const query = `
   UPDATE Products
-  SET quantity = quantity + ?
+  SET quantity = ?
   WHERE shopid = ? AND productid = ?;
   `;
   // Get query results from using query string and sequelize
   const [results, metadata] = await sequelize.query(query, {
-    replacements: [amount, shopid, productid],
+    replacements: [newQuantity, shopid, productid],
     type: QueryTypes.UPDATE,
   });
   // Print out for debugging purposes
@@ -376,7 +376,7 @@ const queries = {
   makeSeller,
   getUsersOrders,
   createOrder,
-  changeProductQuantityBy,
+  setProductQuantity,
   getProduct,
 };
 // Export object
