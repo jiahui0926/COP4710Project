@@ -8,6 +8,7 @@ import {
   ILoginInfo,
   IOrderInfoView,
   IProductInfo,
+  IProductSearch,
   IShopInfoView,
   ISignUpInfo,
   IUserInfoView,
@@ -32,6 +33,28 @@ router.get("/productsOfShop/:id", async (req: Request, res: Response) => {
     req.params.id
   );
   res.status(200).json(shopProducts);
+});
+
+/**
+ * Endpoint to get products of a shop named like a search query
+ */
+router.post("/productsOfShopLike/", async (req: Request, res: Response) => {
+  console.log("Search for product by name");
+  // Get list of products from database
+  const productSearch: IProductSearch = req.body;
+  // Try to create product
+  try {
+    const products = await psqlQueries.getProductsOfShopLike(
+      productSearch.shopid,
+      productSearch.searchQuery
+    );
+    // Return a status 200 and response
+    res.status(201).json(products);
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
 });
 
 /**

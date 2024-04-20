@@ -343,7 +343,7 @@ const setProductQuantity = async (
 
 /**
  * Get product info
- * @param shopid ID of product's shop
+
  * @param productid ID of product
  */
 const getProduct = async (shopid: string, productid: string) => {
@@ -352,6 +352,27 @@ const getProduct = async (shopid: string, productid: string) => {
   // Get query results from using query string and sequelize
   const results: IProductInfo[] = await sequelize.query(query, {
     replacements: [shopid, productid],
+    type: QueryTypes.SELECT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
+/**
+ * Get products in shop named like a string
+ * @param shopid shop to search
+ * @param searchStr search query
+ */
+const getProductsOfShopLike = async (shopid: string, searchStr: string) => {
+  // Set query string
+  const query = `
+  SELECT * FROM Products INNER JOIN Shops ON Products.ShopID = Shops.ShopID WHERE Shops.shopid = ? AND LOWER(name) LIKE ?;
+  `;
+  // Get query results from using query string and sequelize
+  const results: IProductInfo[] = await sequelize.query(query, {
+    replacements: [shopid, `%${searchStr}%`],
     type: QueryTypes.SELECT,
   });
   // Print out for debugging purposes
@@ -378,6 +399,7 @@ const queries = {
   createOrder,
   setProductQuantity,
   getProduct,
+  getProductsOfShopLike,
 };
 // Export object
 export default queries;

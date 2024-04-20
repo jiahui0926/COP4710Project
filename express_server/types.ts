@@ -101,3 +101,8 @@ export interface IProductInfo {
   quantity: number;
   description: string;
 }
+
+export interface IProductSearch {
+  shopid: string;
+  searchQuery: string;
+}

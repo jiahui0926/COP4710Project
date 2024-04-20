@@ -94,3 +94,8 @@ export interface IEditProductData {
   productid: string;
   newQuantity: number;
 }
+
+export interface IProductSearch {
+  shopid: string | undefined;
+  searchQuery: string;
+}

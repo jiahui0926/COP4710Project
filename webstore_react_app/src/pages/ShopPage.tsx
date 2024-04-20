@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { ProductInfo } from "../types";
+import { IProductSearch, ProductInfo } from "../types";
 import ProductsGrid from "../components/ProductsGrid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
-import { Button, Container, Box } from "@mui/material";
+import { Button, Container, Box, TextField } from "@mui/material";
 import { ROUTE_PATHS } from "../constants/routes";
 import { ShopInfo } from "../types";
 
@@ -15,6 +15,7 @@ export default function ShopPage() {
   const [shopProducts, setAllShopProducts] = useState<ProductInfo[]>([]);
   const [shopName, setShopName] = useState<String>("");
   const [userOwnsShop, setUserOwnsShop] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getShopProducts = () => {
     fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetShopInfo}/${id}`)
@@ -28,6 +29,28 @@ export default function ShopPage() {
         setShopName(response[0].shopname);
       });
     fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetAllProductsInAShop}/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error retrieving data.");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        setAllShopProducts(response);
+      });
+  };
+
+  const getShopProductLike = (searchQuery: string) => {
+    const productSearch: IProductSearch = {
+      shopid: id,
+      searchQuery: searchQuery,
+    };
+    console.log("get like");
+    fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToSearchForProductsInAShop}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(productSearch),
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error retrieving data.");
@@ -71,6 +94,17 @@ export default function ShopPage() {
   return (
     <Container>
       <h1>{shopName} Products</h1>
+      <TextField
+        label="Search Products"
+        variant="outlined"
+        value={searchQuery}
+        onChange={(e) => {
+          const searchStr = e.target.value;
+          setSearchQuery(searchStr);
+          getShopProductLike(searchStr);
+        }}
+        sx={{ width: "30%", mb: 3 }} // Adjust the width as needed
+      />
       {userOwnsShop && (
         <Box
           sx={{

@@ -14,4 +14,5 @@ export const API_ROUTE_PATHS = {
   ToGetOrdersByAUser: "get_orders_made_by_user",
   ToBuyProduct: "create_order",
   ToSetProductQuantity: "set_product_quantity",
+  ToSearchForProductsInAShop: "productsOfShopLike",
 } as const;
