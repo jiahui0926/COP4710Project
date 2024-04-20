@@ -23,7 +23,7 @@ export default function OrdersTable({ tableItems }: OrderTableProps) {
             <TableCell>Shop Name</TableCell>
             <TableCell>Product Name</TableCell>
             <TableCell>Quantity</TableCell>
-            <TableCell>Date Ordered</TableCell>
+            <TableCell align="right">Order Time</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -42,7 +42,7 @@ export default function OrdersTable({ tableItems }: OrderTableProps) {
               </TableCell>
               <TableCell>{row.productname}</TableCell>
               <TableCell>{row.quantity}</TableCell>
-              <TableCell align="right">{row.orderdate}</TableCell>
+              <TableCell align="right">{row.ordertime}</TableCell>
             </TableRow>
           ))}
         </TableBody>

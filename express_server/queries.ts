@@ -10,6 +10,7 @@ import {
   IUserInfoView,
   IProductInfo,
   IOrderInfoView,
+  ICreateOrderInfo,
 } from "./types";
 
 /**
@@ -286,6 +287,79 @@ const getUsersOrders = async (userid: string) => {
   return results;
 };
 
+/**
+ * Create order on database
+ * @param createOrderInfo
+ */
+const createOrder = async (createOrderInfo: ICreateOrderInfo) => {
+  // Set query string
+  const query = `
+  INSERT INTO Orders (Buyer, Shop, Product, Quantity, OrderTime) VALUES
+  (?, ?, ?, ?, CURRENT_TIMESTAMP)
+  `;
+  // Get query results from using query string and sequelize
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [
+      createOrderInfo.userid,
+      createOrderInfo.shopid,
+      createOrderInfo.productid,
+      createOrderInfo.quantity,
+    ],
+    type: QueryTypes.INSERT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
+/**
+ * Change quantity of product by an amount
+ * @param shopid ID of product's shop
+ * @param productid ID of product
+ * @param amount Amount to add to product quantity
+ */
+const changeProductQuantityBy = async (
+  shopid: string,
+  productid: string,
+  amount: number
+) => {
+  // Set query string
+  const query = `
+  UPDATE Products
+  SET quantity = quantity + ?
+  WHERE shopid = ? AND productid = ?;
+  `;
+  // Get query results from using query string and sequelize
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [amount, shopid, productid],
+    type: QueryTypes.UPDATE,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
+/**
+ * Get product info
+ * @param shopid ID of product's shop
+ * @param productid ID of product
+ */
+const getProduct = async (shopid: string, productid: string) => {
+  // Set query string
+  const query = `SELECT * FROM Products WHERE shopid = ? AND productid = ?;`;
+  // Get query results from using query string and sequelize
+  const results: IProductInfo[] = await sequelize.query(query, {
+    replacements: [shopid, productid],
+    type: QueryTypes.SELECT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
 // Define default export
 const queries = {
   getUserInfoByEmail,
@@ -301,6 +375,9 @@ const queries = {
   createProduct,
   makeSeller,
   getUsersOrders,
+  createOrder,
+  changeProductQuantityBy,
+  getProduct,
 };
 // Export object
 export default queries;

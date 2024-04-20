@@ -65,17 +65,6 @@ export interface ICreateProductInfo {
   description: string;
 }
 
-// Interface for product data
-export interface IProductInfo {
-  shopid: number;
-  productid: string;
-  name: string;
-  price: number;
-  shopname: string;
-  quantity: number;
-  description: string;
-}
-
 // Interface for order data
 export interface IOrderInfoView {
   orderid: string;
@@ -84,6 +73,24 @@ export interface IOrderInfoView {
   productid: string;
   productname: string;
   quantity: number;
-  orderdate: string;
+  ordertime: string;
   buyerid: string;
+}
+
+// Interface for data to create an order
+export interface ICreateOrderInfo {
+  userid: string;
+  shopid: string;
+  productid: string;
+  quantity: number;
+}
+
+export interface IProductInfo {
+  shopid: string;
+  productid: string;
+  name: string;
+  price: number;
+  shopname: string;
+  quantity: number;
+  description: string;
 }

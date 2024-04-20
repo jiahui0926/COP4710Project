@@ -23,7 +23,7 @@ export interface ProductInfo {
   productid: string;
   name: string;
   price: number;
-  shopid: number;
+  shopid: string;
   shopname: string;
   quantity: number;
   description: string;
@@ -76,6 +76,14 @@ export interface IOrderInfoView {
   productid: string;
   productname: string;
   quantity: number;
-  orderdate: string;
+  ordertime: string;
   buyerid: string;
+}
+
+// Interface for buy request object
+export interface ICreateOrderInfo {
+  userid: string;
+  shopid: string;
+  productid: string;
+  quantity: number;
 }

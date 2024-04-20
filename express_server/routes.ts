@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import psqlQueries from "./queries";
 import {
+  ICreateOrderInfo,
   ICreateProductInfo,
   ICreateShopInfo,
   ILoginInfo,
@@ -202,6 +203,43 @@ router.get(
     }
   }
 );
+
+/**
+ * Endpoint to create an order
+ */
+router.post("/create_order/", async (req: Request, res: Response) => {
+  // Get data to create an order
+  const createOrderInfo: ICreateOrderInfo = req.body;
+  console.log(createOrderInfo);
+
+  try {
+    // Get product's quantity
+    const productInfo = await psqlQueries.getProduct(
+      createOrderInfo.shopid,
+      createOrderInfo.productid
+    );
+    const availableQuantity = productInfo[0].quantity;
+
+    if (createOrderInfo.quantity > availableQuantity) {
+      res.status(401).json(availableQuantity);
+    } else {
+      // Update product quantity
+      await psqlQueries.changeProductQuantityBy(
+        createOrderInfo.shopid,
+        createOrderInfo.productid,
+        -1 * createOrderInfo.quantity
+      );
+      // Create order
+      const createResponse = await psqlQueries.createOrder(createOrderInfo);
+      // Return a status 200 and user's info
+      res.status(201).json(createResponse);
+    }
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
+});
 
 // Export router to be used in index.ts file.
 export { router };

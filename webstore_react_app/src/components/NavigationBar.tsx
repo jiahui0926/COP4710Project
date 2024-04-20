@@ -133,52 +133,50 @@ export default function NavigationBar() {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              {signedIn ? (
-                <>
-                  <MenuItem
-                    key="signOut"
-                    onClick={() => {
-                      navigate(ROUTE_PATHS.Login);
-                      signOut();
-                      handleMenuClose();
-                    }}
-                  >
-                    Sign Out
-                  </MenuItem>
-                  {signedIn && !isASeller && (
+              {signedIn
+                ? [
                     <MenuItem
-                      key="becomeASeller"
+                      key="signOut"
                       onClick={() => {
-                        makeUserASeller();
+                        navigate(ROUTE_PATHS.Login);
+                        signOut();
                         handleMenuClose();
                       }}
                     >
-                      Become a seller
-                    </MenuItem>
-                  )}
-                </>
-              ) : (
-                [
-                  <MenuItem
-                    key="login"
-                    onClick={() => {
-                      navigate(ROUTE_PATHS.Login);
-                      handleMenuClose();
-                    }}
-                  >
-                    Log In
-                  </MenuItem>,
-                  <MenuItem
-                    key="createAccount"
-                    onClick={() => {
-                      navigate(ROUTE_PATHS.SignUp);
-                      handleMenuClose();
-                    }}
-                  >
-                    Create Account
-                  </MenuItem>,
-                ]
-              )}
+                      Sign Out
+                    </MenuItem>,
+                    signedIn && !isASeller && (
+                      <MenuItem
+                        key="becomeASeller"
+                        onClick={() => {
+                          makeUserASeller();
+                          handleMenuClose();
+                        }}
+                      >
+                        Become a seller
+                      </MenuItem>
+                    ),
+                  ]
+                : [
+                    <MenuItem
+                      key="login"
+                      onClick={() => {
+                        navigate(ROUTE_PATHS.Login);
+                        handleMenuClose();
+                      }}
+                    >
+                      Log In
+                    </MenuItem>,
+                    <MenuItem
+                      key="createAccount"
+                      onClick={() => {
+                        navigate(ROUTE_PATHS.SignUp);
+                        handleMenuClose();
+                      }}
+                    >
+                      Create Account
+                    </MenuItem>,
+                  ]}
             </Menu>
           </Box>
         </Toolbar>

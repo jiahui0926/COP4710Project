@@ -8,13 +8,13 @@ import { Button, Container, Box } from "@mui/material";
 import { ROUTE_PATHS } from "../constants/routes";
 
 export default function ShopPage() {
+  let navigate = useNavigate();
   let { isASeller } = useAuth();
   let { id } = useParams();
   const [shopProducts, setAllShopProducts] = useState<ProductInfo[]>([]);
   const [shopName, setShopName] = useState<String>("");
 
-  // Run API calls on initial render
-  useEffect(() => {
+  const getShopProducts = () => {
     fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetShopInfo}/${id}`)
       .then((response) => {
         if (!response.ok) {
@@ -35,9 +35,16 @@ export default function ShopPage() {
       .then((response) => {
         setAllShopProducts(response);
       });
-  }, []);
+  };
 
-  let navigate = useNavigate();
+  const reloadShopProducts = () => {
+    getShopProducts();
+  };
+
+  // Run API calls on initial render
+  useEffect(() => {
+    getShopProducts();
+  }, []);
 
   // Return React component
   return (
@@ -59,7 +66,10 @@ export default function ShopPage() {
           </Button>
         </Box>
       )}
-      <ProductsGrid gridItems={shopProducts} />
+      <ProductsGrid
+        gridItems={shopProducts}
+        reloadFunction={reloadShopProducts}
+      />
     </Container>
   );
 }

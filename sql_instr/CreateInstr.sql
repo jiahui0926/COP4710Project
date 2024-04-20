@@ -49,7 +49,7 @@ CREATE TABLE Products(
     ProductID UUID DEFAULT gen_random_uuid(),
     Price REAL NOT NULL,
     Name VARCHAR(100),
-    Quantity INTEGER NOT NULL,
+    Quantity INTEGER NOT NULL CHECK (Quantity >= 0),
     Description TEXT,
     CONSTRAINT products_pk PRIMARY KEY(ShopID, ProductID),
     CONSTRAINT shop_fkey FOREIGN KEY (ShopID) REFERENCES Shops(ShopID) ON DELETE CASCADE
@@ -61,8 +61,8 @@ CREATE TABLE Orders(
     Buyer UUID NOT NULL REFERENCES Buyers(BuyerID),
     Shop UUID NOT NULL,
     Product UUID NOT NULL,
-    Quantity INTEGER NOT NULL,
-    OrderDate Date NOT NULL,
+    Quantity INTEGER NOT NULL CHECK (Quantity >= 0),
+    OrderTime TIMESTAMP NOT NULL,
     CONSTRAINT order_product_fkey FOREIGN KEY (Shop, Product) REFERENCES Products(ShopID, ProductID)
 );
 
@@ -96,7 +96,8 @@ FROM Users;
 
 -- Create OrderInfoView
 CREATE VIEW OrdersInfoView AS
-SELECT O.orderid, O.shop as shopid, S.shopName, P.productID, P.name as productname, O.quantity, O.orderDate, O.buyer
+SELECT O.orderid, O.shop as shopid, S.shopName, P.productID, P.name as productname, O.quantity, O.ordertime, O.buyer
 FROM Orders O
 JOIN Shops S ON O.shop = S.shopID
-JOIN Products P ON P.productID = O.product AND P.shopID = S.shopID;
+JOIN Products P ON P.productID = O.product AND P.shopID = S.shopID
+ORDER BY O.ordertime DESC;
