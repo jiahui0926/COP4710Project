@@ -85,7 +85,8 @@ SELECT
   owner as ownerid, CONCAT(firstname, ' ', lastname) AS ownername, email AS owneremail, dob AS ownerdob
   FROM Shops
   INNER JOIN Sellers ON Shops.Owner = Sellers.SellerID
-  INNER JOIN Users ON Shops.Owner = Users.UserID;
+  INNER JOIN Users ON Shops.Owner = Users.UserID
+  ORDER BY shopname;
 
 -- UserInfoView View
 CREATE VIEW UserInfoView AS
