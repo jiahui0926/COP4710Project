@@ -94,14 +94,16 @@ export default function NavigationBar() {
             </Button>
           )}
 
-          <Button
-            color="inherit"
-            onClick={() => {
-              navigate(ROUTE_PATHS.Orders);
-            }}
-          >
-            Orders
-          </Button>
+          {signedIn && (
+            <Button
+              color="inherit"
+              onClick={() => {
+                navigate(ROUTE_PATHS.Orders);
+              }}
+            >
+              Orders
+            </Button>
+          )}
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
 
