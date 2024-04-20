@@ -82,7 +82,8 @@ CREATE TABLE Reviews(
 CREATE VIEW ShopInfoView AS
 SELECT
   shopid, shopname, description, establishdate,
-  owner as ownerid, CONCAT(firstname, ' ', lastname) AS ownername, email AS owneremail, dob AS ownerdob
+  owner as ownerid, CONCAT(firstname, ' ', lastname) AS ownername, email AS owneremail, dob AS ownerdob,
+  (SELECT COUNT(*) FROM Products WHERE Products.shopID = Shops.shopID) AS productcount
   FROM Shops
   INNER JOIN Sellers ON Shops.Owner = Sellers.SellerID
   INNER JOIN Users ON Shops.Owner = Users.UserID

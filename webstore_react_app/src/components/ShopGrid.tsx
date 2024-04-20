@@ -26,6 +26,9 @@ const populateShopGrid = (gridItems: ShopInfo[], navigate: NavigateFunction) =>
             Since {shop.establishdate.toString()}
           </Typography>
           <Typography variant="body2">
+            No. of Products: {shop.productcount}
+            <br />
+            <br />
             Store Description:
             <br />
             {shop.description}
