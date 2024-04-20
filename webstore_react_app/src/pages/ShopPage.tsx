@@ -45,7 +45,6 @@ export default function ShopPage() {
       shopid: id,
       searchQuery: searchQuery,
     };
-    console.log("get like");
     fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToSearchForProductsInAShop}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

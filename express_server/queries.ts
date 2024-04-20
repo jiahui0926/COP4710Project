@@ -381,6 +381,26 @@ const getProductsOfShopLike = async (shopid: string, searchStr: string) => {
   return results;
 };
 
+/**
+ * Get Shops named like a search query
+ * @param searchStr search query
+ */
+const getShopsLike = async (searchStr: string) => {
+  // Set query string
+  const query = `
+  SELECT * FROM ShopInfoView WHERE LOWER(shopname) LIKE ?;
+  `;
+  // Get query results from using query string and sequelize
+  const results: IShopInfoView[] = await sequelize.query(query, {
+    replacements: [`%${searchStr}%`],
+    type: QueryTypes.SELECT,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
 // Define default export
 const queries = {
   getUserInfoByEmail,
@@ -400,6 +420,7 @@ const queries = {
   setProductQuantity,
   getProduct,
   getProductsOfShopLike,
+  getShopsLike,
 };
 // Export object
 export default queries;

@@ -106,3 +106,7 @@ export interface IProductSearch {
   shopid: string;
   searchQuery: string;
 }
+
+export interface IShopSearch {
+  searchQuery: string;
+}

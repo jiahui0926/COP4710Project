@@ -99,3 +99,7 @@ export interface IProductSearch {
   shopid: string | undefined;
   searchQuery: string;
 }
+
+export interface IShopSearch {
+  searchQuery: string;
+}

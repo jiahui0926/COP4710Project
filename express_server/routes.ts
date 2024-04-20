@@ -10,6 +10,7 @@ import {
   IProductInfo,
   IProductSearch,
   IShopInfoView,
+  IShopSearch,
   ISignUpInfo,
   IUserInfoView,
 } from "./types";
@@ -23,6 +24,25 @@ const router = express.Router();
 router.get("/getAllShops", async (req: Request, res: Response) => {
   const shops = await psqlQueries.getAllShopsInfo();
   res.status(200).json(shops);
+});
+
+/**
+ * Endpoint to get shops named like a search query
+ */
+router.post("/shopsLike/", async (req: Request, res: Response) => {
+  console.log("Search for shop by name");
+  // Get list of products from database
+  const shopSearch: IShopSearch = req.body;
+  // Try to create product
+  try {
+    const shops = await psqlQueries.getShopsLike(shopSearch.searchQuery);
+    // Return a status 200 and response
+    res.status(201).json(shops);
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
 });
 
 /**
