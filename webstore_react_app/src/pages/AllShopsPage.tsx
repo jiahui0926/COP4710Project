@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { IShopSearch, ShopInfo } from "../types";
 import ShopGrid from "../components/ShopGrid";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
-import { Typography, TextField } from "@mui/material";
+import { Typography, TextField, Container } from "@mui/material";
 
 function AllShopsPage() {
   const [allShops, setAllShops] = useState<ShopInfo[]>([]);
@@ -44,7 +44,7 @@ function AllShopsPage() {
 
   // Return React component
   return (
-    <>
+    <Container>
       <Typography variant="h4">All Shops</Typography>
       <TextField
         label="Search Shops"
@@ -58,7 +58,7 @@ function AllShopsPage() {
         sx={{ width: "30%", my: 3 }} // Adjust the width as needed
       />
       <ShopGrid gridItems={allShops} />
-    </>
+    </Container>
   );
 }
 
