@@ -97,7 +97,7 @@ export default function LoginPage() {
       }}
     >
       <Paper elevation={3} sx={{ marginTop: 8, padding: 8 }}>
-        <Typography component="h1" variant="h5" align="center">
+        <Typography component="h1" variant="h3" align="center">
           Log In
         </Typography>
         <Box component="form" sx={{ mt: 3 }} onSubmit={handleFormSubmission}>

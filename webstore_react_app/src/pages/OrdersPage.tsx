@@ -5,7 +5,7 @@ import { ROUTE_PATHS } from "../constants/routes";
 import { useAuth } from "../contexts/AuthProvider";
 import { IOrderInfoView, ShopInfo } from "../types";
 import OrdersTable from "../components/OrdersTable";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
 
 export default function OrdersPage() {
@@ -37,6 +37,9 @@ export default function OrdersPage() {
 
   return (
     <Container>
+      <Typography variant="h4" style={{ marginBottom: 10 }}>
+        Your Order History
+      </Typography>
       <OrdersTable tableItems={orderRows}></OrdersTable>
     </Container>
   );

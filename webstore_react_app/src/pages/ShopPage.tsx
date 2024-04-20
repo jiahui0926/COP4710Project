@@ -4,7 +4,7 @@ import ProductsGrid from "../components/ProductsGrid";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
-import { Button, Container, Box, TextField } from "@mui/material";
+import { Button, Container, Box, TextField, Typography } from "@mui/material";
 import { ROUTE_PATHS } from "../constants/routes";
 import { ShopInfo } from "../types";
 
@@ -92,9 +92,11 @@ export default function ShopPage() {
   // Return React component
   return (
     <Container>
-      <h1>{shopName} Products</h1>
+      <Typography variant="h4" style={{ marginBottom: 10 }}>
+        {shopName}'s Products
+      </Typography>
       <TextField
-        label="Search Products"
+        label={`Search ${shopName}`}
         variant="outlined"
         value={searchQuery}
         onChange={(e) => {

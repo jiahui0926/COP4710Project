@@ -202,7 +202,7 @@ export default function SignUpPage() {
       }}
     >
       <Paper elevation={3} sx={{ marginTop: 8, padding: 8 }}>
-        <Typography component="h1" variant="h5" align="center">
+        <Typography component="h1" variant="h3" align="center">
           Sign Up
         </Typography>
         <Box component="form" sx={{ mt: 3 }} onSubmit={handleFormSubmission}>

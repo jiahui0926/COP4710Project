@@ -45,7 +45,7 @@ function AllShopsPage() {
   // Return React component
   return (
     <>
-      <Typography variant="h4">Shops</Typography>
+      <Typography variant="h4">All Shops</Typography>
       <TextField
         label="Search Shops"
         variant="outlined"

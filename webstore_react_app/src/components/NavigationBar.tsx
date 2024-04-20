@@ -79,7 +79,7 @@ export default function NavigationBar() {
                 navigate(ROUTE_PATHS.AllShops);
               }}
             >
-              All Stores
+              All Shops
             </Button>
           )}
 
@@ -90,7 +90,7 @@ export default function NavigationBar() {
                 navigate(ROUTE_PATHS.YourShops);
               }}
             >
-              Your Stores
+              Your Shops
             </Button>
           )}
 

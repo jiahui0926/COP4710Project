@@ -5,7 +5,7 @@ import { ROUTE_PATHS } from "../constants/routes";
 import { useAuth } from "../contexts/AuthProvider";
 import { ShopInfo } from "../types";
 import ShopsTable from "../components/ShopsTable";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
 
 export default function CreateShopPage() {
@@ -37,6 +37,9 @@ export default function CreateShopPage() {
 
   return (
     <Container>
+      <Typography variant="h4" style={{ marginBottom: 5 }}>
+        Your Shops
+      </Typography>
       <Container
         sx={{
           display: "flex",

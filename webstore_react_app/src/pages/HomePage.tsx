@@ -28,7 +28,7 @@ export default function HomePage() {
     >
       <Paper elevation={3} sx={{ marginTop: 8, padding: 8 }}>
         {/* Welcome Title Message */}
-        <Typography component="h1" variant="h5" align="center">
+        <Typography component="h1" variant="h2" align="center">
           Welcome to {siteName}
         </Typography>
         <Grid container spacing={2}>
@@ -90,6 +90,7 @@ export default function HomePage() {
                 variant="contained"
                 sx={{ mt: 3 }}
                 onClick={() => navigate(ROUTE_PATHS.AllShops)}
+                size="large"
               >
                 See All Stores
               </Button>
