@@ -6,13 +6,15 @@ import { useAuth } from "../contexts/AuthProvider";
 import { API_BASE_URL, API_ROUTE_PATHS } from "../constants/apiConstants";
 import { Button, Container, Box } from "@mui/material";
 import { ROUTE_PATHS } from "../constants/routes";
+import { ShopInfo } from "../types";
 
 export default function ShopPage() {
   let navigate = useNavigate();
-  let { isASeller } = useAuth();
+  let { isASeller, userID } = useAuth();
   let { id } = useParams();
   const [shopProducts, setAllShopProducts] = useState<ProductInfo[]>([]);
   const [shopName, setShopName] = useState<String>("");
+  const [userOwnsShop, setUserOwnsShop] = useState<boolean>(false);
 
   const getShopProducts = () => {
     fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetShopInfo}/${id}`)
@@ -37,6 +39,26 @@ export default function ShopPage() {
       });
   };
 
+  const getShopsOwnedByUser = () => {
+    fetch(`${API_BASE_URL}/${API_ROUTE_PATHS.ToGetShopsOfUser}/${userID}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error retrieving data.");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        console.log("Response", response.length);
+        console.log(response);
+        for (let i = 0; i < response.length; i++) {
+          let shop: ShopInfo = response[i];
+          if (shop.shopid === id) {
+            setUserOwnsShop(true);
+          }
+        }
+      });
+  };
+
   const reloadShopProducts = () => {
     getShopProducts();
   };
@@ -44,13 +66,14 @@ export default function ShopPage() {
   // Run API calls on initial render
   useEffect(() => {
     getShopProducts();
+    getShopsOwnedByUser();
   }, []);
 
   // Return React component
   return (
     <Container>
       <h1>{shopName} Products</h1>
-      {isASeller && (
+      {userOwnsShop && (
         <Box
           sx={{
             display: "flex",

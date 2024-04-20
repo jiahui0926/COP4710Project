@@ -38,14 +38,14 @@ export interface IUserInfoView {
 
 // Interface for data in the ShopInfoView
 export interface IShopInfoView {
-  shopid: number;
+  shopid: string;
   shopname: string;
-  description: string | null;
-  establishdate: Date;
-  ownerid: number;
+  description: string;
+  establishdate: string;
+  ownerid: string;
   ownername: string;
   owneremail: string;
-  ownerdob: Date;
+  ownerdob: string;
   productcount: number;
 }
 
