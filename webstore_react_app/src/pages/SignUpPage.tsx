@@ -78,12 +78,7 @@ const years = Array.from({ length: currentYear - 1900 + 1 }, (v, k) => ({
 export default function SignUpPage() {
   let navigate = useNavigate();
 
-  const { signedIn, signIn } = useAuth();
-  useEffect(() => {
-    if (signedIn) {
-      navigate(ROUTE_PATHS.Home);
-    }
-  }, []);
+  const { signIn } = useAuth();
 
   // States for form values
   const [selectedMonth, setSelectedMonth] = useState(

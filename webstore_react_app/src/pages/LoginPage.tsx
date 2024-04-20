@@ -19,11 +19,6 @@ import { ILoginInfo, IUserInfoView } from "../types";
 
 export default function LoginPage() {
   const { signedIn, userName, userID, signIn } = useAuth();
-  useEffect(() => {
-    if (signedIn) {
-      navigate(ROUTE_PATHS.Home);
-    }
-  }, []);
 
   // States for form values
   let navigate = useNavigate();

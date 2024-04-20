@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../constants/routes";
 
 // Interface for context items
 interface AuthContextType {
@@ -38,12 +46,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [userName, setUserName] = useState("");
   const [userID, setUserID] = useState("");
   const [isASeller, setIsASeller] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // const [userID, setUserID] = useState("f08acce7-b0dd-43ab-9576-91ae3dabe2bb");
-  // const [signedIn, setSignedIn] = useState(true);
-  // const [userName, setUserName] = useState("David");
-  // const [isASeller, setIsASeller] = useState(true);
+  // Redirect to homepage if user is not signed in, expect if user is on sign up or login page
+  useEffect(() => {
+    const noRedirectPaths: String[] = [
+      ROUTE_PATHS.Home,
+      ROUTE_PATHS.Login,
+      ROUTE_PATHS.SignUp,
+    ];
+    const currentPath = location.pathname;
+    if (!signedIn && !noRedirectPaths.includes(currentPath)) {
+      navigate(ROUTE_PATHS.Home);
+    } else if (
+      signedIn &&
+      noRedirectPaths.includes(currentPath) &&
+      currentPath != ROUTE_PATHS.Home
+    ) {
+      navigate(ROUTE_PATHS.Home);
+    }
+  }, [signedIn, navigate]);
 
+  // Function to sign user in
   const signIn = (userName: string, userID: string, isASeller: boolean) => {
     setSignedIn(true);
     setUserName(userName);
@@ -51,6 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsASeller(isASeller);
   };
 
+  // Function to sign user out
   const signOut = () => {
     setSignedIn(false);
     setUserName("");
