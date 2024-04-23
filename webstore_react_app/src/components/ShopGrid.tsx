@@ -19,7 +19,7 @@ const populateShopGrid = (gridItems: ShopInfo[], navigate: NavigateFunction) =>
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
           <Typography variant="h5" component="div">
-            Store: {shop.shopname}
+            Shop: {shop.shopname}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Created by {shop.ownername} <br />

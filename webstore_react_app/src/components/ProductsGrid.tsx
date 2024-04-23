@@ -213,7 +213,7 @@ function ProductsGrid({
                 sx={{ mr: 1 }} // Add some margin to the right of the TextField
               />
               <Button size="small" onClick={handleBuyClick}>
-                Buy
+                Place Order
               </Button>
               {userOwnsShop && (
                 <Button
