@@ -153,8 +153,8 @@ export default function SignUpPage() {
 
       // If the response is not a status in 200-299
       if (!response.ok) {
-        if (response.status === 400) {
-          throw new Error("Server error.");
+        if (response.status === 401) {
+          throw new Error("Invalid Input: Email already in use.");
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -165,13 +165,13 @@ export default function SignUpPage() {
         userFormInfo.userid,
         userFormInfo.isaseller
       );
+      // Disable form
+      setDisableForm(true);
     } catch (error: any) {
       console.error("SignUp Error:", error.message);
       setSnackbarMessage(error.message);
       setSnackbarOpen(true);
     }
-    // Disable form
-    setDisableForm(true);
   };
 
   // Handlers for form field changes

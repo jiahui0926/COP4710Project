@@ -326,10 +326,23 @@ router.post("/updateUserInfo", async (req: Request, res: Response) => {
   console.log(newUserInfo);
 
   try {
-    // Update product quantity
-    await psqlQueries.updateUserData(newUserInfo);
-    // Return a status 200 and user's info
-    res.status(200).json(true);
+    // Get "old" user data
+    const oldUserDataList: IUserInfoView[] = await psqlQueries.getUserInfoByID(
+      newUserInfo.userid
+    );
+    const oldUserData: IUserInfoView = oldUserDataList[0];
+
+    // Check if user with new email already exists
+    const userExists = await psqlQueries.checkIfUserExists(newUserInfo.email);
+    if (oldUserData.email != newUserInfo.email && userExists) {
+      // If a user with new email already exists return a status 401
+      res.status(401).json(userExists);
+    } else {
+      // Update user data
+      await psqlQueries.updateUserData(newUserInfo);
+      // Return a status 200 and user's info
+      res.status(200).json(true);
+    }
   } catch (error) {
     // Return a status 400 and error
     res.status(400).json(error);
