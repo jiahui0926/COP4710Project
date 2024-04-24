@@ -16,6 +16,7 @@ import CreateStorePage from "./pages/CreateShopPage";
 import YourShops from "./pages/YourShops";
 import CreateProductPage from "./pages/CreateProductPage";
 import OrdersPage from "./pages/OrdersPage";
+import AccountInfoPage from "./pages/AccountInfoPage";
 
 function App() {
   useEffect(() => {
@@ -43,6 +44,10 @@ function App() {
             <Route
               path={`${ROUTE_PATHS.CreateProduct}/:shopID`}
               element={<CreateProductPage />}
+            />
+            <Route
+              path={ROUTE_PATHS.AccountInfo}
+              element={<AccountInfoPage />}
             />
           </Routes>
         </div>

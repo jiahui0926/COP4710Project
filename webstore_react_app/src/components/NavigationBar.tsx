@@ -137,6 +137,17 @@ export default function NavigationBar() {
             >
               {signedIn
                 ? [
+                    signedIn && (
+                      <MenuItem
+                        key="seeAccountInformation"
+                        onClick={() => {
+                          navigate(ROUTE_PATHS.AccountInfo);
+                          handleMenuClose();
+                        }}
+                      >
+                        Your Account
+                      </MenuItem>
+                    ),
                     <MenuItem
                       key="signOut"
                       onClick={() => {

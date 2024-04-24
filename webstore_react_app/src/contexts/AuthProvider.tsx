@@ -68,6 +68,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [signedIn, navigate]);
 
+  useEffect(() => {
+    if (userID == "" || userID == undefined) {
+      signOut();
+    }
+  }, [userID]);
+
   // Function to sign user in
   const signIn = (userName: string, userID: string, isASeller: boolean) => {
     setSignedIn(true);

@@ -6,6 +6,7 @@ export const API_ROUTE_PATHS = {
   ToGetShopInfo: "shopInfo",
   SignUp: "signup",
   ToGetUserInfo: "user",
+  ToGetUserInfoByID: "userByID",
   Login: "login",
   ToGetShopsOfUser: "shopsownedby",
   ToCreateShop: "createshop",
@@ -16,4 +17,5 @@ export const API_ROUTE_PATHS = {
   ToSetProductQuantity: "set_product_quantity",
   ToSearchForProductsInAShop: "productsOfShopLike",
   ToSearchForShop: "shopsLike",
+  ToUpdateUserInfo: "updateUserInfo",
 } as const;

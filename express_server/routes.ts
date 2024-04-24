@@ -94,6 +94,14 @@ router.get("/user/:email", async (req: Request, res: Response) => {
 });
 
 /**
+ * Endpoint to get a user's data by id
+ */
+router.get("/userByID/:id", async (req: Request, res: Response) => {
+  const users = await psqlQueries.getUserInfoByID(req.params.id);
+  res.status(200).json(users);
+});
+
+/**
  * Endpoint to signup/register a new user
  */
 router.post("/signup/", async (req: Request, res: Response) => {
@@ -308,5 +316,26 @@ router.post("/set_product_quantity/", async (req: Request, res: Response) => {
     console.log(error);
   }
 });
+
+/**
+ * Endpoint to update user info
+ */
+router.post("/updateUserInfo", async (req: Request, res: Response) => {
+  // Get data to create an order
+  const newUserInfo: IUserInfoView = req.body;
+  console.log(newUserInfo);
+
+  try {
+    // Update product quantity
+    await psqlQueries.updateUserData(newUserInfo);
+    // Return a status 200 and user's info
+    res.status(200).json(true);
+  } catch (error) {
+    // Return a status 400 and error
+    res.status(400).json(error);
+    console.log(error);
+  }
+});
+
 // Export router to be used in index.ts file.
 export { router };

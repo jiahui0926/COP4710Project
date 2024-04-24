@@ -405,6 +405,37 @@ const getShopsLike = async (searchStr: string) => {
   return results;
 };
 
+/**
+ * Update user info in database
+ * @param newUserInfo new user information to update database with
+ */
+const updateUserData = async (newUserInfo: IUserInfoView) => {
+  // Set query string
+  const query = `
+  UPDATE Users
+  SET (userid, firstname, lastname, email, dob, password)
+  = (?, ?, ?, ?, ?, ?)
+  WHERE userid = ?;
+  `;
+  // Get query results from using query string and sequelize
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [
+      newUserInfo.userid,
+      newUserInfo.firstname,
+      newUserInfo.lastname,
+      newUserInfo.email,
+      newUserInfo.dob,
+      newUserInfo.password,
+      newUserInfo.userid,
+    ],
+    type: QueryTypes.UPDATE,
+  });
+  // Print out for debugging purposes
+  console.log(results);
+  // Return results to caller
+  return results;
+};
+
 // Define default export
 const queries = {
   getUserInfoByEmail,
@@ -425,6 +456,7 @@ const queries = {
   getProduct,
   getProductsOfShopLike,
   getShopsLike,
+  updateUserData,
 };
 // Export object
 export default queries;

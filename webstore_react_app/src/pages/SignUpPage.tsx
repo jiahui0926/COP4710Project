@@ -71,8 +71,8 @@ const months = [
 ];
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: currentYear - 1900 + 1 }, (v, k) => ({
-  value: 1990 + k,
-  label: 1990 + k,
+  value: 1900 + k,
+  label: 1900 + k,
 }));
 
 export default function SignUpPage() {
