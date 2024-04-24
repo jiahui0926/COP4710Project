@@ -74,6 +74,8 @@ export interface IOrderInfoView {
   productname: string;
   quantity: number;
   ordertime: string;
+  productprice: number;
+  totalprice: number;
   buyerid: string;
 }
 

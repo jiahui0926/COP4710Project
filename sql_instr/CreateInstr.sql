@@ -102,7 +102,15 @@ FROM Users;
 
 -- Create OrderInfoView
 CREATE VIEW OrdersInfoView AS
-SELECT O.orderid, O.shop as shopid, S.shopName, P.productID, P.name as productname, O.quantity, O.ordertime, O.buyer
+SELECT
+O.orderid, O.shop as shopid,
+S.shopName, P.productID,
+P.name as productname,
+P.Price as productprice,
+O.quantity,
+(SELECT ROUND(CAST(O.quantity * P.Price AS NUMERIC) , 2)) as totalprice,
+O.ordertime,
+O.buyer
 FROM Orders O
 JOIN Shops S ON O.shop = S.shopID
 JOIN Products P ON P.productID = O.product AND P.shopID = S.shopID

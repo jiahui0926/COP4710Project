@@ -22,7 +22,9 @@ export default function OrdersTable({ tableItems }: OrderTableProps) {
             <TableCell>Order ID</TableCell>
             <TableCell>Shop Name</TableCell>
             <TableCell>Product Name</TableCell>
+            <TableCell>Product Price</TableCell>
             <TableCell>Quantity</TableCell>
+            <TableCell align="right">Total Price</TableCell>
             <TableCell align="right">Order Time</TableCell>
           </TableRow>
         </TableHead>
@@ -41,7 +43,9 @@ export default function OrdersTable({ tableItems }: OrderTableProps) {
                 </Link>
               </TableCell>
               <TableCell>{row.productname}</TableCell>
+              <TableCell>${row.productprice}</TableCell>
               <TableCell>{row.quantity}</TableCell>
+              <TableCell>${row.totalprice}</TableCell>
               <TableCell align="right">{row.ordertime}</TableCell>
             </TableRow>
           ))}
