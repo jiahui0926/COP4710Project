@@ -93,7 +93,11 @@ SELECT
 CREATE VIEW UserInfoView AS
 SELECT 
 userid, firstname, lastname, email, dob, password, 
-EXISTS(SELECT * FROM Sellers WHERE Users.userid = Sellers.sellerid) AS isaseller
+CASE WHEN EXISTS (
+    SELECT 1 
+    FROM Sellers 
+    WHERE Users.userid = Sellers.sellerid
+  ) THEN true ELSE false END AS isaseller
 FROM Users;
 
 -- Create OrderInfoView
