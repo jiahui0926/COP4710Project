@@ -45,6 +45,7 @@ export interface IUserInfoView {
   dob: string;
   password: string;
   isaseller: boolean;
+  total_spent: number;
 }
 
 export interface ILoginInfo {

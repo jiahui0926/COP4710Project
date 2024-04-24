@@ -33,6 +33,7 @@ interface IUserFormData {
   month: string;
   year: string;
   isaseller: boolean;
+  total_spent: number;
 }
 
 // Constants for month and year options
@@ -116,6 +117,7 @@ export default function SignUpPage() {
     month: "1",
     year: "2000",
     isaseller: false,
+    total_spent: 0,
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -135,6 +137,7 @@ export default function SignUpPage() {
       dob:
         userFormInfo.year + "-" + userFormInfo.month + "-" + userFormInfo.day,
       isaseller: isASeller,
+      total_spent: userFormInfo.total_spent,
     };
 
     console.log(updateUserInfo);
@@ -241,6 +244,7 @@ export default function SignUpPage() {
         month: retUserData.dob.split("-")[1],
         year: retUserData.dob.split("-")[0],
         isaseller: retUserData.isaseller,
+        total_spent: retUserData.total_spent,
       };
       // Show and set user info
       setUserFormInfo(userInfoToSet);
@@ -324,6 +328,27 @@ export default function SignUpPage() {
                 sx={{ display: "flex", height: "100%", alignItems: "center" }}
               >
                 {isASeller ? "Seller" : "Buyer"}
+              </Typography>
+            </Grid>
+            {/* Total Spent Field */}
+            <Grid item xs={3}>
+              <Typography
+                component="h1"
+                variant="body1"
+                align="center"
+                sx={{ display: "flex", height: "100%", alignItems: "center" }}
+              >
+                Total Spent:
+              </Typography>
+            </Grid>
+            <Grid item xs={9}>
+              <Typography
+                component="h1"
+                variant="h6"
+                align="center"
+                sx={{ display: "flex", height: "100%", alignItems: "center" }}
+              >
+                ${userFormInfo.total_spent}
               </Typography>
             </Grid>
             {/* First Name Fields */}

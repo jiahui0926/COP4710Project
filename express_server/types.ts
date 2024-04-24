@@ -34,6 +34,7 @@ export interface IUserInfoView {
   dob: string;
   password: string;
   isaseller: boolean;
+  total_spent: number;
 }
 
 // Interface for data in the ShopInfoView

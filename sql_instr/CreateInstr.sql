@@ -89,6 +89,21 @@ SELECT
   INNER JOIN Users ON Shops.Owner = Users.UserID
   ORDER BY shopname;
 
+-- Function to calculate total spent by a user
+CREATE OR REPLACE FUNCTION calculate_total_spent_by_user(buyer_id UUID)
+RETURNS NUMERIC AS $$
+DECLARE
+    total_spent NUMERIC := 0;
+BEGIN
+    SELECT COALESCE(ROUND(SUM(CAST(p.Price * o.Quantity AS NUMERIC)),2), 0) INTO total_spent
+    FROM Orders o
+    JOIN Products p ON o.Product = p.ProductID
+    WHERE o.Buyer = calculate_total_spent_by_user.buyer_id;
+
+    RETURN total_spent;
+END;
+$$ LANGUAGE plpgsql;
+
 -- UserInfoView View
 CREATE VIEW UserInfoView AS
 SELECT 
@@ -97,7 +112,8 @@ CASE WHEN EXISTS (
     SELECT 1 
     FROM Sellers 
     WHERE Users.userid = Sellers.sellerid
-  ) THEN true ELSE false END AS isaseller
+  ) THEN true ELSE false END AS isaseller,
+  calculate_total_spent_by_user(userid) AS total_spent
 FROM Users;
 
 -- Create OrderInfoView
