@@ -131,3 +131,6 @@ FROM Orders O
 JOIN Shops S ON O.shop = S.shopID
 JOIN Products P ON P.productID = O.product AND P.shopID = S.shopID
 ORDER BY O.ordertime DESC;
+
+
+--asd
